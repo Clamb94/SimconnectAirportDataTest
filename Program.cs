@@ -4,6 +4,11 @@ using System.Timers;
 
 namespace SimconnectAirportDataTest
 {
+    public static class ObjectExtensions
+    {
+        public static T StaticCast<T>(this T o) => o;
+    }
+
     internal class Program
     {
         public static SimConnect OSimConnect { get; set; } = null!;
@@ -23,8 +28,11 @@ namespace SimconnectAirportDataTest
         struct airport
         {
             public double latitude;
-            public int nRunways;
+            public System.Int32 arrivals;
+            public System.Int32 nRunways;
         };
+
+        public static object[] objects;
 
         static void Main(string[] args)
         {
@@ -71,7 +79,9 @@ namespace SimconnectAirportDataTest
             try
             {
                 airport a = (airport)data.Data[0];
-                Console.WriteLine($"Lat: {a.latitude}; Rwys: {a.nRunways}");
+                Console.WriteLine($"Lat: {a.latitude}");
+                Console.WriteLine($"Runways: {a.nRunways}");
+
             } catch (Exception ex)
             {
                 Console.WriteLine(ex);
@@ -102,10 +112,12 @@ namespace SimconnectAirportDataTest
             OSimConnect.AddToFacilityDefinition(sd, "OPEN AIRPORT");
 
             OSimConnect.AddToFacilityDefinition(sd, "LATITUDE");
-            OSimConnect.AddToFacilityDefinition(sd, "N_RUNWAYS"); //Requesting only this (without LATITUDE) returns the correct number in the SIMCONNECT_RECV_FACILITY_DATA.Data[0] response
+            OSimConnect.AddToFacilityDefinition(sd, "N_ARRIVALS");
+            OSimConnect.AddToFacilityDefinition(sd, "N_RUNWAYS");
 
             OSimConnect.AddToFacilityDefinition(sd, "CLOSE AIRPORT");
 
+            OSimConnect.RegisterFacilityDataDefineStruct<airport>(SIMCONNECT_FACILITY_DATA_TYPE.AIRPORT);
             OSimConnect.RequestFacilityData(sd, rd, "EDDF", "");
         }
 
