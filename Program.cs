@@ -25,11 +25,21 @@ namespace SimconnectAirportDataTest
         public static System.Timers.Timer checkMessagesTimer = new(500);
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct airport
+        struct Airport
         {
             public double latitude;
             public System.Int32 arrivals;
             public System.Int32 nRunways;
+        };
+
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        struct Runway
+        {
+            public System.Int32 primaryNumber;
+            public double latitude;
+            public float heading;
+            public float length;
+            public float width;
         };
 
         public static object[] objects;
@@ -78,9 +88,22 @@ namespace SimconnectAirportDataTest
             Console.WriteLine(System.Reflection.MethodBase.GetCurrentMethod()?.Name);
             try
             {
-                airport a = (airport)data.Data[0];
-                Console.WriteLine($"Lat: {a.latitude}");
-                Console.WriteLine($"Runways: {a.nRunways}");
+                Type t = data.Data[0].GetType();
+                if (t == typeof(Airport))
+                {
+                    Airport a = (Airport)data.Data[0];
+                    Console.WriteLine($"Lat: {a.latitude}");
+                    Console.WriteLine($"Runways: {a.nRunways}");
+                } else if (t == typeof(Runway)) {
+                    Runway r = (Runway)data.Data[0];
+                    Console.WriteLine($"Rwy Number: {r.primaryNumber}");
+                    Console.WriteLine($"Rwy Heading: {r.heading}");
+                    Console.WriteLine($"Rwy Length: {r.length}");
+                } else
+                {
+                    Console.WriteLine("SomethingElse");
+                }
+
 
             } catch (Exception ex)
             {
@@ -115,9 +138,21 @@ namespace SimconnectAirportDataTest
             OSimConnect.AddToFacilityDefinition(sd, "N_ARRIVALS");
             OSimConnect.AddToFacilityDefinition(sd, "N_RUNWAYS");
 
+            OSimConnect.AddToFacilityDefinition(sd, "OPEN RUNWAY");
+
+            OSimConnect.AddToFacilityDefinition(sd, "PRIMARY_NUMBER");
+            OSimConnect.AddToFacilityDefinition(sd, "LATITUDE");
+            OSimConnect.AddToFacilityDefinition(sd, "HEADING");
+            OSimConnect.AddToFacilityDefinition(sd, "LENGHT");
+            OSimConnect.AddToFacilityDefinition(sd, "WIDTH");
+
+            OSimConnect.AddToFacilityDefinition(sd, "CLOSE RUNWAY");
+
             OSimConnect.AddToFacilityDefinition(sd, "CLOSE AIRPORT");
 
-            OSimConnect.RegisterFacilityDataDefineStruct<airport>(SIMCONNECT_FACILITY_DATA_TYPE.AIRPORT);
+            
+            OSimConnect.RegisterFacilityDataDefineStruct<Airport>(SIMCONNECT_FACILITY_DATA_TYPE.AIRPORT);
+            OSimConnect.RegisterFacilityDataDefineStruct<Runway>(SIMCONNECT_FACILITY_DATA_TYPE.RUNWAY);
             OSimConnect.RequestFacilityData(sd, rd, "EDDF", "");
         }
 
