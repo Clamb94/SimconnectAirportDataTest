@@ -1,21 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\GitHub\\SimconnectAirportDataTest\\SimconnectAirportDataTest\\SimconnectAirportDataTest.csproj": {}
+    "C:\\GitHub\\SimconnectAirportDataTest\\SimconnectAirportDataTest.csproj": {}
   },
   "projects": {
-    "C:\\GitHub\\SimconnectAirportDataTest\\SimconnectAirportDataTest\\SimconnectAirportDataTest.csproj": {
+    "C:\\GitHub\\SimconnectAirportDataTest\\SimconnectAirportDataTest.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\GitHub\\SimconnectAirportDataTest\\SimconnectAirportDataTest\\SimconnectAirportDataTest.csproj",
+        "projectUniqueName": "C:\\GitHub\\SimconnectAirportDataTest\\SimconnectAirportDataTest.csproj",
         "projectName": "SimconnectAirportDataTest",
-        "projectPath": "C:\\GitHub\\SimconnectAirportDataTest\\SimconnectAirportDataTest\\SimconnectAirportDataTest.csproj",
+        "projectPath": "C:\\GitHub\\SimconnectAirportDataTest\\SimconnectAirportDataTest.csproj",
         "packagesPath": "C:\\Users\\axel\\.nuget\\packages\\",
-        "outputPath": "C:\\GitHub\\SimconnectAirportDataTest\\SimconnectAirportDataTest\\obj\\",
+        "outputPath": "C:\\GitHub\\SimconnectAirportDataTest\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
           "C:\\Users\\axel\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -27,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -61,7 +59,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     }

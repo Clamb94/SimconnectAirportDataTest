@@ -1,4 +1,5 @@
 ﻿using Microsoft.FlightSimulator.SimConnect;
+using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
 using System.Timers;
 
@@ -40,6 +41,15 @@ namespace SimconnectAirportDataTest
             public float heading;
             public float length;
             public float width;
+            public int pavement;
+        };
+
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        struct Pavement
+        {
+            public float length;
+            public float width;
+            public int enable;
         };
 
         public static object[] objects;
@@ -58,6 +68,7 @@ namespace SimconnectAirportDataTest
 
                 OSimConnect.OnRecvFacilityData += OSimConnect_OnRecvFacilityData;
                 OSimConnect.OnRecvFacilityDataEnd += OSimConnect_OnRecvFacilityDataEnd;
+                OSimConnect.OnRecvException += OSimConnect_OnRecvException;
                 Console.WriteLine("Connection established");
 
                 //Start the timer to check for new simconnect messages
@@ -72,7 +83,13 @@ namespace SimconnectAirportDataTest
             Thread.Sleep(10000);
             Console.ReadLine();
         }
-      
+
+        private static void OSimConnect_OnRecvException(SimConnect sender, SIMCONNECT_RECV_EXCEPTION data)
+        {
+     
+            Console.WriteLine($"Exception: {data.dwException}" );
+        }
+
         private static void CheckMessagesTimer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             OSimConnect?.ReceiveMessage();
@@ -99,6 +116,12 @@ namespace SimconnectAirportDataTest
                     Console.WriteLine($"Rwy Number: {r.primaryNumber}");
                     Console.WriteLine($"Rwy Heading: {r.heading}");
                     Console.WriteLine($"Rwy Length: {r.length}");
+                    Console.WriteLine($"Rwy width: {r.width}");
+                    Console.WriteLine($"Rwy pavement: {r.pavement}");
+                } else if (t == typeof(Pavement)) { 
+                    Pavement p = (Pavement)data.Data[0];
+                    Console.WriteLine($"Threshold length: {p.length}");
+                    Console.WriteLine($"Threshold width: {p.width}");
                 } else
                 {
                     Console.WriteLine("SomethingElse");
@@ -131,29 +154,38 @@ namespace SimconnectAirportDataTest
             ++m_iCurrentDefinition;
             SIMVAR_DEFINITION sd = (SIMVAR_DEFINITION)m_iCurrentDefinition;
 
-
+            //AIRPORT
             OSimConnect.AddToFacilityDefinition(sd, "OPEN AIRPORT");
-
             OSimConnect.AddToFacilityDefinition(sd, "LATITUDE");
             OSimConnect.AddToFacilityDefinition(sd, "N_ARRIVALS");
             OSimConnect.AddToFacilityDefinition(sd, "N_RUNWAYS");
 
+            //RUNWAY
             OSimConnect.AddToFacilityDefinition(sd, "OPEN RUNWAY");
-
             OSimConnect.AddToFacilityDefinition(sd, "PRIMARY_NUMBER");
             OSimConnect.AddToFacilityDefinition(sd, "LATITUDE");
             OSimConnect.AddToFacilityDefinition(sd, "HEADING");
-            OSimConnect.AddToFacilityDefinition(sd, "LENGHT");
+            OSimConnect.AddToFacilityDefinition(sd, "LENGTH");
             OSimConnect.AddToFacilityDefinition(sd, "WIDTH");
+            OSimConnect.AddToFacilityDefinition(sd, "SURFACE");
 
+            //Threshold
+            OSimConnect.AddToFacilityDefinition(sd, "OPEN PRIMARY_THRESHOLD");
+            OSimConnect.AddToFacilityDefinition(sd, "LENGTH");
+            OSimConnect.AddToFacilityDefinition(sd, "WIDTH");
+            OSimConnect.AddToFacilityDefinition(sd, "ENABLE");
+
+            OSimConnect.AddToFacilityDefinition(sd, "CLOSE PRIMARY_THRESHOLD");
             OSimConnect.AddToFacilityDefinition(sd, "CLOSE RUNWAY");
-
             OSimConnect.AddToFacilityDefinition(sd, "CLOSE AIRPORT");
 
             
             OSimConnect.RegisterFacilityDataDefineStruct<Airport>(SIMCONNECT_FACILITY_DATA_TYPE.AIRPORT);
             OSimConnect.RegisterFacilityDataDefineStruct<Runway>(SIMCONNECT_FACILITY_DATA_TYPE.RUNWAY);
-            OSimConnect.RequestFacilityData(sd, rd, "EDDF", "");
+            OSimConnect.RegisterFacilityDataDefineStruct<Pavement>(SIMCONNECT_FACILITY_DATA_TYPE.PAVEMENT);
+
+            OSimConnect.RequestFacilityData(sd, rd, "LFML", "");
+            Console.WriteLine("Request finished");
         }
 
         
