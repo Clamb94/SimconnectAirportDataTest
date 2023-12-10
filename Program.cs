@@ -42,6 +42,14 @@ namespace SimconnectAirportDataTest
             public float width;
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        public struct Pavement
+        {
+            public float length;
+            public float width;
+            public System.Int32 enable;
+        }
+
         public static object[] objects;
 
         static void Main(string[] args)
@@ -99,6 +107,10 @@ namespace SimconnectAirportDataTest
                     Console.WriteLine($"Rwy Number: {r.primaryNumber}");
                     Console.WriteLine($"Rwy Heading: {r.heading}");
                     Console.WriteLine($"Rwy Length: {r.length}");
+                } else if (t == typeof(Pavement))
+                {
+                    Pavement p = (Pavement)data.Data[0];
+                    Console.WriteLine($"Pavement length: {p.length}");
                 } else
                 {
                     Console.WriteLine("SomethingElse");
@@ -146,6 +158,18 @@ namespace SimconnectAirportDataTest
             OSimConnect.AddToFacilityDefinition(sd, "LENGHT");
             OSimConnect.AddToFacilityDefinition(sd, "WIDTH");
 
+            OSimConnect.AddToFacilityDefinition(sd, "OPEN PRIMARY_THRESHOLD");
+            OSimConnect.AddToFacilityDefinition(sd, "LENGTH");
+            OSimConnect.AddToFacilityDefinition(sd, "WIDTH");
+            OSimConnect.AddToFacilityDefinition(sd, "ENABLE");
+            OSimConnect.AddToFacilityDefinition(sd, "CLOSE PRIMARY_THRESHOLD");
+            OSimConnect.AddToFacilityDefinition(sd, "OPEN SECONDARY_THRESHOLD");
+            OSimConnect.AddToFacilityDefinition(sd, "LENGTH");
+            OSimConnect.AddToFacilityDefinition(sd, "WIDTH");
+            OSimConnect.AddToFacilityDefinition(sd, "ENABLE");
+            OSimConnect.AddToFacilityDefinition(sd, "CLOSE SECONDARY_THRESHOLD");
+
+
             OSimConnect.AddToFacilityDefinition(sd, "CLOSE RUNWAY");
 
             OSimConnect.AddToFacilityDefinition(sd, "CLOSE AIRPORT");
@@ -153,7 +177,8 @@ namespace SimconnectAirportDataTest
             
             OSimConnect.RegisterFacilityDataDefineStruct<Airport>(SIMCONNECT_FACILITY_DATA_TYPE.AIRPORT);
             OSimConnect.RegisterFacilityDataDefineStruct<Runway>(SIMCONNECT_FACILITY_DATA_TYPE.RUNWAY);
-            OSimConnect.RequestFacilityData(sd, rd, "EDDF", "");
+            OSimConnect.RegisterFacilityDataDefineStruct<Pavement>(SIMCONNECT_FACILITY_DATA_TYPE.PAVEMENT);
+            OSimConnect.RequestFacilityData(sd, rd, "LFML", "");
         }
 
         
