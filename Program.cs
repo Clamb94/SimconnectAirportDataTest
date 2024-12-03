@@ -155,7 +155,7 @@ namespace SimconnectAirportDataTest
             OSimConnect.AddToFacilityDefinition(sd, "PRIMARY_NUMBER");
             OSimConnect.AddToFacilityDefinition(sd, "LATITUDE");
             OSimConnect.AddToFacilityDefinition(sd, "HEADING");
-            OSimConnect.AddToFacilityDefinition(sd, "LENGHT");
+            OSimConnect.AddToFacilityDefinition(sd, "LENGTH");
             OSimConnect.AddToFacilityDefinition(sd, "WIDTH");
 
             OSimConnect.AddToFacilityDefinition(sd, "OPEN PRIMARY_THRESHOLD");
